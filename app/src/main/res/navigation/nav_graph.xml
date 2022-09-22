@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ContactFragment">
+
+    <fragment
+        android:id="@+id/ContactFragment"
+        android:name="br.zampnrs.viacepapi_example.presentation.contact.view.ContactFragment"
+        android:label="@string/contact_fragment_label"
+        tools:layout="@layout/fragment_contact">
+        <action
+            android:id="@+id/action_ContactFragment_to_NewContactFragment"
+            app:destination="@id/NewContactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/NewContactFragment"
+        android:name="br.zampnrs.viacepapi_example.presentation.new_contact.view.NewContactFragment"
+        android:label="@string/new_contact_fragment_label"
+        tools:layout="@layout/fragment_new_contact"/>
+</navigation>
