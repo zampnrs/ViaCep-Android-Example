@@ -4,4 +4,15 @@
 
     <string name="contact_fragment_label">Contact Fragment</string>
     <string name="new_contact_fragment_label">New Contact Fragment</string>
+    <string name="cep_label">CEP</string>
+    <string name="street_label">Logradouro</string>
+    <string name="number_label">Número</string>
+    <string name="complement_label">Complemento</string>
+    <string name="neighborhood_label">Bairro</string>
+    <string name="city_label">Cidade</string>
+    <string name="uf_label">UF</string>
+    <string name="address_label">Endereço</string>
+    <string name="country_code_label">DDI</string>
+    <string name="state_code_label">DDD</string>
+    <string name="phone_number_label">Celular</string>
 </resources>
