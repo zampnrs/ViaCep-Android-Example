@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ViaCepAPI-Example</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="contact_fragment_label">Contact Fragment</string>
+    <string name="new_contact_fragment_label">New Contact Fragment</string>
+</resources>
