@@ -15,4 +15,6 @@
     <string name="country_code_label">DDI</string>
     <string name="state_code_label">DDD</string>
     <string name="phone_number_label">Celular</string>
+    <string name="name_label">Nome</string>
+    <string name="surname_label">Sobrenome</string>
 </resources>
