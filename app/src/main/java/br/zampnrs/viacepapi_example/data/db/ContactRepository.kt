@@ -8,6 +8,8 @@ class ContactRepository @Inject constructor(
 ) {
     fun getAll(): List<ContactData> = contactDao.getAll()
 
+    fun getById(id: Int): ContactData = contactDao.getById(id)
+
     fun insert(contact: ContactData) {
         contactDao.insert(contact)
     }

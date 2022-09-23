@@ -22,6 +22,8 @@ class NewContactViewModel @Inject constructor(
 
     val mutableLiveData = MutableLiveData<ViewState>()
 
+    fun getById(id: Int) = contactRepository.getById(id)
+
     fun insert(contact: ContactData) {
         try {
             contactRepository.insert(contact)
