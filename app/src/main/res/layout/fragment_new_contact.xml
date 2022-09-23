@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".presentation.new_contact.view.NewContactFragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
@@ -16,11 +26,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/save_new_contact_fab"
         android:layout_marginHorizontal="@dimen/field_margin"
         android:layout_marginVertical="@dimen/fab_margin"
+        app:layout_constraintBottom_toTopOf="@id/save_new_contact_fab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/backButton">
@@ -86,7 +97,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/country_code_editText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,9 +110,10 @@
                     android:hint="@string/state_code_label">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/state_code_editText"
+                        android:id="@+id/area_code_editText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,7 +127,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/phone_number_editText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -137,7 +151,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cep_editText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,7 +165,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/street_editText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:focusable="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -169,7 +185,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/number_editText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -197,7 +214,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/neighborhood_editText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:focusable="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -216,7 +234,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/city_editText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:focusable="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -230,7 +249,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/uf_editText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:focusable="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

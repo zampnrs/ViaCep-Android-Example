@@ -17,4 +17,5 @@
     <string name="phone_number_label">Celular</string>
     <string name="name_label">Nome</string>
     <string name="surname_label">Sobrenome</string>
+    <string name="save_contact_error">Alguns campos parecem estar vazios</string>
 </resources>
