@@ -14,46 +14,29 @@ class NewContactViewModel @Inject constructor(
 ) : ViewModel() {
 
     sealed class ViewState {
-        object ContactLoadingSuccess: ViewState()
-        object DbActionSuccess : ViewState()
-        class DbActionError(errorMessage: String?): ViewState()
+        object InsertActionSuccess : ViewState()
+        object InsertActionError : ViewState()
+        object UpdateActionSuccess : ViewState()
+        object UpdateActionError : ViewState()
     }
 
     val mutableLiveData = MutableLiveData<ViewState>()
 
-    private var contactsList: List<ContactData> = emptyList()
-
-    fun getAll() {
-        contactRepository.getAll().also {
-            contactsList = it
-            mutableLiveData.postValue(ViewState.ContactLoadingSuccess)
-        }
-    }
-
     fun insert(contact: ContactData) {
         try {
             contactRepository.insert(contact)
-            mutableLiveData.postValue(ViewState.DbActionSuccess)
+            mutableLiveData.postValue(ViewState.InsertActionSuccess)
         } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.DbActionError(e.message))
+            mutableLiveData.postValue(ViewState.InsertActionError)
         }
     }
 
     fun update(contact: ContactData) {
         try {
             contactRepository.update(contact)
-            mutableLiveData.postValue(ViewState.DbActionSuccess)
+            mutableLiveData.postValue(ViewState.UpdateActionSuccess)
         } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.DbActionError(e.message))
-        }
-    }
-
-    fun delete(name: String) {
-        try {
-            contactRepository.delete(name)
-            mutableLiveData.postValue(ViewState.DbActionSuccess)
-        } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.DbActionError(e.message))
+            mutableLiveData.postValue(ViewState.UpdateActionError)
         }
     }
 

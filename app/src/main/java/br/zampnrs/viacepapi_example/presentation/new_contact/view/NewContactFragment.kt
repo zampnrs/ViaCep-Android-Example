@@ -80,17 +80,21 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
     private fun subscribeLiveData() {
         newContactViewModel.mutableLiveData.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is NewContactViewModel.ViewState.ContactLoadingSuccess -> {
-                    TODO("Set contact information in the fields")
-                }
-
-                is NewContactViewModel.ViewState.DbActionSuccess -> {
+                is NewContactViewModel.ViewState.InsertActionSuccess -> {
                     showToast(getString(R.string.contact_saved_message))
                     findNavController().popBackStack()
                 }
 
-                is NewContactViewModel.ViewState.DbActionError ->
+                is NewContactViewModel.ViewState.InsertActionError ->
                     showToast(getString(R.string.contact_saving_error_message))
+
+                is NewContactViewModel.ViewState.UpdateActionSuccess -> {
+                    showToast(getString(R.string.contact_updated_message))
+                    findNavController().popBackStack()
+                }
+
+                is NewContactViewModel.ViewState.UpdateActionError ->
+                    showToast(getString(R.string.contact_updating_error_message))
             }
         })
     }
