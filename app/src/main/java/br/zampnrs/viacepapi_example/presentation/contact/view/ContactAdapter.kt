@@ -3,11 +3,10 @@ package br.zampnrs.viacepapi_example.presentation.contact.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 
-import br.zampnrs.viacepapi_example.R
 import br.zampnrs.viacepapi_example.data.db.ContactData
+import br.zampnrs.viacepapi_example.databinding.ItemContactBinding
 
 
 class ContactAdapter(
@@ -17,14 +16,9 @@ class ContactAdapter(
     var onDeleteContact: ((contactName: String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        return ContactViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.item_contact,
-                parent,
-                false
-            )
-        )
+        return ContactViewHolder(ItemContactBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        ))
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
