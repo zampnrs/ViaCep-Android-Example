@@ -8,8 +8,8 @@ class ContactViewHolder(
     val binding: ItemContactBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(contactName : String) {
-        binding.contactNameTextView.text = contactName
+    fun bind(contactName : String, contactSuurname: String) {
+        binding.contactNameTextView.text = "$contactName $contactSuurname"
     }
 
 }
