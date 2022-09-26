@@ -18,5 +18,10 @@
         android:id="@+id/NewContactFragment"
         android:name="br.zampnrs.viacepapi_example.presentation.new_contact.view.NewContactFragment"
         android:label="@string/new_contact_fragment_label"
-        tools:layout="@layout/fragment_new_contact"/>
+        tools:layout="@layout/fragment_new_contact">
+        <argument
+            android:name="contactId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

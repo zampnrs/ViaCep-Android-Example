@@ -7,12 +7,14 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 
 import br.zampnrs.viacepapi_example.R
 import br.zampnrs.viacepapi_example.data.db.ContactData
 import br.zampnrs.viacepapi_example.databinding.FragmentNewContactBinding
 import br.zampnrs.viacepapi_example.presentation.new_contact.viewmodel.NewContactViewModel
 import br.zampnrs.viacepapi_example.utils.BaseFragment
+import br.zampnrs.viacepapi_example.utils.Constants
 import br.zampnrs.viacepapi_example.utils.showToast
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,12 +26,14 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
 ) {
 
     private val newContactViewModel: NewContactViewModel by viewModels()
+    private val args: NewContactFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
             setClickListeners()
+            if (args.contactId != Constants.DEFAULT_CONTACT_ID) fillAllFields()
         }
         subscribeLiveData()
     }
@@ -45,6 +49,23 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
             } else {
                 newContactViewModel.insert(getAllFieldsData())
             }
+        }
+    }
+
+    private fun FragmentNewContactBinding.fillAllFields() {
+        newContactViewModel.getById(args.contactId).let {
+            nameEditText.setText(it.name)
+            surnameEditText.setText(it.surname)
+            countryCodeEditText.setText(it.country_code)
+            areaCodeEditText.setText(it.area_code)
+            phoneNumberEditText.setText(it.phone_number)
+            cepEditText.setText(it.cep)
+            streetEditText.setText(it.street)
+            numberEditText.setText(it.number)
+            complementEditText.setText(it.complement)
+            neighborhoodEditText.setText(it.neighborhood)
+            cityEditText.setText(it.city)
+            ufEditText.setText(it.state)
         }
     }
 
