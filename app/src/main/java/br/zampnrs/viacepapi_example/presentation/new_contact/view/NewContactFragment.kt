@@ -1,6 +1,8 @@
 package br.zampnrs.viacepapi_example.presentation.new_contact.view
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 
@@ -11,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 
 import br.zampnrs.viacepapi_example.R
 import br.zampnrs.viacepapi_example.data.db.ContactData
+import br.zampnrs.viacepapi_example.data.network.responses.AddressResponse
 import br.zampnrs.viacepapi_example.databinding.FragmentNewContactBinding
 import br.zampnrs.viacepapi_example.presentation.new_contact.viewmodel.NewContactViewModel
 import br.zampnrs.viacepapi_example.utils.BaseFragment
@@ -33,9 +36,10 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
 
         binding.apply {
             setClickListeners()
+            setTextChangeListener()
+            subscribeLiveData()
             if (args.contactId != Constants.DEFAULT_CONTACT_ID) fillAllFields()
         }
-        subscribeLiveData()
     }
 
     private fun FragmentNewContactBinding.setClickListeners() {
@@ -50,6 +54,23 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
                 newContactViewModel.insert(getAllFieldsData())
             }
         }
+    }
+
+    private fun FragmentNewContactBinding.setTextChangeListener() {
+        cepEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                p0.toString().let {
+                    if (it.length == Constants.CEP_LENGTH) {
+                        progressBar.visibility = View.VISIBLE
+                        newContactViewModel.loadCep(it)
+                    }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 
     private fun FragmentNewContactBinding.fillAllFields() {
@@ -78,7 +99,6 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
             cepEditText.text.isNullOrEmpty() ||
             streetEditText.text.isNullOrEmpty() ||
             numberEditText.text.isNullOrEmpty() ||
-            complementEditText.text.isNullOrEmpty() ||
             neighborhoodEditText.text.isNullOrEmpty() ||
             cityEditText.text.isNullOrEmpty() ||
             ufEditText.text.isNullOrEmpty()
@@ -98,7 +118,7 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
         state = ufEditText.text.toString()
     )
 
-    private fun subscribeLiveData() {
+    private fun FragmentNewContactBinding.subscribeLiveData() {
         newContactViewModel.mutableLiveData.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is NewContactViewModel.ViewState.InsertActionSuccess -> {
@@ -116,7 +136,24 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
 
                 is NewContactViewModel.ViewState.UpdateActionError ->
                     showToast(getString(R.string.contact_updating_error_message))
+
+                is NewContactViewModel.ViewState.AddressLoadingSuccess -> {
+                    progressBar.visibility = View.GONE
+                    fillAddressFields(state.address)
+                }
+
+                is NewContactViewModel.ViewState.AddressLoadingError -> {
+                    progressBar.visibility = View.GONE
+                    showToast(getString(R.string.wrong_zip_code))
+                }
             }
         })
+    }
+
+    private fun FragmentNewContactBinding.fillAddressFields(address: AddressResponse) {
+        streetEditText.setText(address.logradouro)
+        neighborhoodEditText.setText(address.bairro)
+        cityEditText.setText(address.localidade)
+        ufEditText.setText(address.uf)
     }
 }
