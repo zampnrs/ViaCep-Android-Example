@@ -9,18 +9,18 @@ import androidx.room.Update
 interface ContactDao {
 
     @Query("SELECT * FROM contact ORDER BY id DESC")
-    fun getAll(): List<ContactData>
+    suspend fun getAll(): List<ContactData>
 
     @Query("SELECT * FROM contact WHERE id = :id")
-    fun getById(id: Int) : ContactData
+    suspend fun getById(id: Int) : ContactData
 
     @Insert
-    fun insert(contact: ContactData)
+    suspend fun insert(contact: ContactData)
 
     @Update
-    fun update(contact: ContactData)
+    suspend fun update(contact: ContactData)
 
     @Query("DELETE FROM contact WHERE id = :id")
-    fun delete(id: Int)
+    suspend fun delete(id: Int)
 
 }

@@ -16,11 +16,9 @@ abstract class ContactDatabase: RoomDatabase() {
 
         fun getAppDbInstance(context: Context): ContactDatabase {
             if(DB_INSTANCE == null) {
-                DB_INSTANCE = Room.databaseBuilder<ContactDatabase>(
+                DB_INSTANCE = Room.databaseBuilder(
                     context.applicationContext, ContactDatabase::class.java, "contactDb"
-                )
-                    .allowMainThreadQueries()
-                    .build()
+                ).build()
             }
             return DB_INSTANCE!!
         }

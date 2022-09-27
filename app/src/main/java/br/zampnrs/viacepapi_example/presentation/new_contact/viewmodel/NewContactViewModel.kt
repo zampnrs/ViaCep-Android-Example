@@ -33,9 +33,11 @@ class NewContactViewModel @Inject constructor(
 
     val mutableLiveData = MutableLiveData<ViewState>()
 
-    fun getById(id: Int) = contactRepository.getById(id)
+    fun getById(id: Int) = viewModelScope.launch {
+        contactRepository.getById(id)
+    }
 
-    fun insert(contact: ContactData) {
+    fun insert(contact: ContactData) = viewModelScope.launch {
         try {
             contactRepository.insert(contact)
             mutableLiveData.postValue(ViewState.InsertActionSuccess)
@@ -44,7 +46,7 @@ class NewContactViewModel @Inject constructor(
         }
     }
 
-    fun update(contact: ContactData, contactId: Int) {
+    fun update(contact: ContactData, contactId: Int) = viewModelScope.launch {
         try {
             contact.id = contactId
             contactRepository.update(contact)
@@ -54,7 +56,7 @@ class NewContactViewModel @Inject constructor(
         }
     }
 
-    fun deleteContact(id: Int) {
+    fun deleteContact(id: Int) = viewModelScope.launch {
         try {
             contactRepository.delete(id)
             mutableLiveData.postValue(ViewState.DeleteActionSuccess)
