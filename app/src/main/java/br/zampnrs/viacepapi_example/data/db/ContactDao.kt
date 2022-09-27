@@ -20,7 +20,7 @@ interface ContactDao {
     @Update
     fun update(contact: ContactData)
 
-    @Query("DELETE FROM contact WHERE name = :name")
-    fun delete(name: String)
+    @Query("DELETE FROM contact WHERE id = :id")
+    fun delete(id: Int)
 
 }

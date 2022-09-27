@@ -18,7 +18,7 @@ class ContactRepository @Inject constructor(
         contactDao.update(contact)
     }
 
-    fun delete(name: String) {
-        contactDao.delete(name)
+    fun delete(id: Int) {
+        contactDao.delete(id)
     }
 }
