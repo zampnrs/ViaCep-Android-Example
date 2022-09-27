@@ -20,7 +20,7 @@
     <string name="save_contact_error">Alguns campos parecem estar vazios</string>
     <string name="contact_saved_message">Contato salvo com sucesso</string>
     <string name="contact_saving_error_message">Erro ao salvar contato</string>
-    <string name="contact_updated_message">Error updating contact</string>
+    <string name="contact_updated_message">Contato atualizado com sucesso</string>
     <string name="contact_updating_error_message">Erro ao atualizar contato</string>
     <string name="empty_contactBook_label">Agenda vazia</string>
     <string name="wrong_zip_code">CEP incorreto</string>

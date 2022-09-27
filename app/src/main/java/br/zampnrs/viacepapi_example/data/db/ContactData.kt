@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "contact")
 class ContactData (
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id: Int = 0,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "surname") val surname: String,
     @ColumnInfo(name = "country_code") val country_code: Int,

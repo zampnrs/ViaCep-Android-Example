@@ -56,7 +56,17 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
             if (checkEmptyFields()) {
                 showToast(getString(R.string.save_contact_error), Toast.LENGTH_LONG)
             } else {
-                newContactViewModel.insert(getAllFieldsData())
+                handleContactActions()
+            }
+        }
+    }
+
+    private fun FragmentNewContactBinding.handleContactActions() {
+        getAllFieldsData().also {
+            if (args.contactId == Constants.DEFAULT_CONTACT_ID) {
+                newContactViewModel.insert(it)
+            } else {
+                newContactViewModel.update(it, args.contactId)
             }
         }
     }

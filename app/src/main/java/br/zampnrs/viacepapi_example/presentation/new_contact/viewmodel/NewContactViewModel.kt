@@ -8,7 +8,6 @@ import br.zampnrs.viacepapi_example.data.db.ContactData
 import br.zampnrs.viacepapi_example.data.db.ContactRepository
 import br.zampnrs.viacepapi_example.data.network.responses.AddressResponse
 import br.zampnrs.viacepapi_example.domain.AddressUseCase
-import br.zampnrs.viacepapi_example.presentation.contact.viewmodel.ContactViewModel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -45,8 +44,9 @@ class NewContactViewModel @Inject constructor(
         }
     }
 
-    fun update(contact: ContactData) {
+    fun update(contact: ContactData, contactId: Int) {
         try {
+            contact.id = contactId
             contactRepository.update(contact)
             mutableLiveData.postValue(ViewState.UpdateActionSuccess)
         } catch (e: Exception) {
