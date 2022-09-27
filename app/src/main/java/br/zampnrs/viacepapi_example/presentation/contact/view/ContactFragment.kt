@@ -52,19 +52,14 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(
     private fun setAdapterActions() {
         contactAdapter.apply {
             onSelectContact = ::onContactSelected
-            onDeleteContact = ::onContactDeleted
         }
     }
 
-    private fun onContactSelected(contactId: Int, edit: Boolean) {
+    private fun onContactSelected(contactId: Int) {
         findNavController().navigate(
             ContactFragmentDirections.actionContactFragmentToNewContactFragment()
                 .setContactId(contactId)
         )
-    }
-
-    private fun onContactDeleted(name: String) {
-        contactViewModel.deleteContact(name)
     }
 
     private fun FragmentContactBinding.subscribeLiveData() {
@@ -72,10 +67,6 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(
             when (state) {
                 is ContactViewModel.ViewState.AllContactsLoadingSuccess ->
                     handleContactLoadingSuccess()
-                is ContactViewModel.ViewState.DeleteActionSuccess ->
-                    contactViewModel.getAllContacts()
-                is ContactViewModel.ViewState.DeleteActionError ->
-                    state.errorMessage?.let { showToast(it) }
                 else -> {}
             }
         })

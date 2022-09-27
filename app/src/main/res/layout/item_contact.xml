@@ -14,26 +14,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/field_margin"
             android:paddingVertical="@dimen/field_margin"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/contactName_textView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/field_margin"/>
+                android:layout_margin="@dimen/field_margin"
+                android:gravity="center"
+                android:textSize="18sp"/>
 
-            <ImageView
-                android:id="@+id/editContact_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@android:drawable/ic_menu_edit"/>
-
-            <ImageView
-                android:id="@+id/deleteContact_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@android:drawable/ic_delete"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
 
         </LinearLayout>
     </ScrollView>

@@ -12,8 +12,7 @@ import br.zampnrs.viacepapi_example.databinding.ItemContactBinding
 class ContactAdapter(
     private var contactList: List<ContactData> = emptyList()
 ): RecyclerView.Adapter<ContactViewHolder>() {
-    var onSelectContact: ((contactId: Int, edit: Boolean) -> Unit)? = null
-    var onDeleteContact: ((contactName: String) -> Unit)? = null
+    var onSelectContact: ((contactId: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         return ContactViewHolder(ItemContactBinding.inflate(
@@ -22,16 +21,10 @@ class ContactAdapter(
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-        holder.bind(contactList[position].name)
+        holder.bind(contactList[position].name, contactList[position].surname)
         holder.binding.apply {
             contactNameTextView.setOnClickListener {
-                onSelectContact?.invoke(contactList[position].id, false)
-            }
-            editContactButton.setOnClickListener {
-                onSelectContact?.invoke(contactList[position].id, true)
-            }
-            deleteContactButton.setOnClickListener {
-                onDeleteContact?.invoke(contactList[position].name)
+                onSelectContact?.invoke(contactList[position].id)
             }
         }
     }
