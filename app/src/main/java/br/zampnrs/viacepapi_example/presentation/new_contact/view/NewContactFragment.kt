@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -47,6 +48,10 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
             findNavController().popBackStack()
         }
 
+        deleteButton.setOnClickListener {
+            showAlert(getString(R.string.alert_title), getString(R.string.delete_message))
+        }
+
         saveNewContactFab.setOnClickListener {
             if (checkEmptyFields()) {
                 showToast(getString(R.string.save_contact_error), Toast.LENGTH_LONG)
@@ -54,6 +59,22 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
                 newContactViewModel.insert(getAllFieldsData())
             }
         }
+    }
+
+    private fun showAlert(alertTitle : String, alertMessage : String) {
+        val builder = activity?.let{ AlertDialog.Builder(it) }
+        builder?.setMessage(alertMessage)
+        builder?.setTitle(alertTitle)
+        builder?.setPositiveButton(getString(R.string.delete_action)) { dialog, _ ->
+            dialog.dismiss()
+            newContactViewModel.deleteContact(args.contactId)
+        }
+        builder?.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = builder?.create()
+        alertDialog?.show()
     }
 
     private fun FragmentNewContactBinding.setTextChangeListener() {
@@ -136,6 +157,12 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
 
                 is NewContactViewModel.ViewState.UpdateActionError ->
                     showToast(getString(R.string.contact_updating_error_message))
+
+                is NewContactViewModel.ViewState.DeleteActionSuccess ->
+                    findNavController().popBackStack()
+
+                is NewContactViewModel.ViewState.DeleteActionError ->
+                    showToast(getString(R.string.contact_deleting_error_message))
 
                 is NewContactViewModel.ViewState.AddressLoadingSuccess -> {
                     progressBar.visibility = View.GONE

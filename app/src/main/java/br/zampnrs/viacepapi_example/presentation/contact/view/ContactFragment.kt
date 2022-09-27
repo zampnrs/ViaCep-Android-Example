@@ -74,13 +74,8 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(
 
     private fun FragmentContactBinding.handleContactLoadingSuccess() {
         contactViewModel.contactsList.let { list ->
-            if (list.isEmpty()) {
-                emptyContactBookTextView.visibility = View.VISIBLE
-            }
-            else {
-                emptyContactBookTextView.visibility = View.GONE
-                contactAdapter.setList(list)
-            }
+            emptyContactBookTextView.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+            contactAdapter.setList(list)
         }
     }
 

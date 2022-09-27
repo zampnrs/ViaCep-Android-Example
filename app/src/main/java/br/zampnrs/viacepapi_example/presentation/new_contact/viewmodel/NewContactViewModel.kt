@@ -8,6 +8,7 @@ import br.zampnrs.viacepapi_example.data.db.ContactData
 import br.zampnrs.viacepapi_example.data.db.ContactRepository
 import br.zampnrs.viacepapi_example.data.network.responses.AddressResponse
 import br.zampnrs.viacepapi_example.domain.AddressUseCase
+import br.zampnrs.viacepapi_example.presentation.contact.viewmodel.ContactViewModel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,6 +26,8 @@ class NewContactViewModel @Inject constructor(
         object InsertActionError : ViewState()
         object UpdateActionSuccess : ViewState()
         object UpdateActionError : ViewState()
+        object DeleteActionSuccess : ViewState()
+        object DeleteActionError : ViewState()
         class AddressLoadingSuccess(val address: AddressResponse) : ViewState()
         object AddressLoadingError : ViewState()
     }
@@ -48,6 +51,15 @@ class NewContactViewModel @Inject constructor(
             mutableLiveData.postValue(ViewState.UpdateActionSuccess)
         } catch (e: Exception) {
             mutableLiveData.postValue(ViewState.UpdateActionError)
+        }
+    }
+
+    fun deleteContact(id: Int) {
+        try {
+            contactRepository.delete(id)
+            mutableLiveData.postValue(ViewState.DeleteActionSuccess)
+        } catch (e: Exception) {
+            mutableLiveData.postValue(ViewState.DeleteActionError)
         }
     }
 

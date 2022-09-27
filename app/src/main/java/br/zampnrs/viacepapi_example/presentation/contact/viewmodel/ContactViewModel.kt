@@ -17,8 +17,7 @@ class ContactViewModel @Inject constructor(
 {
     sealed class ViewState {
         object AllContactsLoadingSuccess: ViewState()
-        object DeleteActionSuccess : ViewState()
-        class DeleteActionError(val errorMessage: String?) : ViewState()
+
     }
 
     val mutableLiveData = MutableLiveData<ViewState>()
@@ -32,12 +31,4 @@ class ContactViewModel @Inject constructor(
         }
     }
 
-    fun deleteContact(name: String) {
-        try {
-            contactRepository.delete(name)
-            mutableLiveData.postValue(ViewState.DeleteActionSuccess)
-        } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.DeleteActionError(e.message))
-        }
-    }
 }
