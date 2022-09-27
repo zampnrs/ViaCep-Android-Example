@@ -39,7 +39,9 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
             setClickListeners()
             setTextChangeListener()
             subscribeLiveData()
-            if (args.contactId != Constants.DEFAULT_CONTACT_ID) fillAllFields()
+            if (args.contactId != Constants.DEFAULT_CONTACT_ID) {
+                newContactViewModel.getById(args.contactId)
+            }
         }
     }
 
@@ -104,21 +106,19 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
         })
     }
 
-    private fun FragmentNewContactBinding.fillAllFields() {
-        newContactViewModel.getById(args.contactId).let {
-            nameEditText.setText(it.name)
-            surnameEditText.setText(it.surname)
-            countryCodeEditText.setText(it.country_code.toString())
-            areaCodeEditText.setText(it.area_code.toString())
-            phoneNumberEditText.setText(it.phone_number.toString())
-            cepEditText.setText(it.cep.toString())
-            streetEditText.setText(it.street)
-            numberEditText.setText(it.number.toString())
-            complementEditText.setText(it.complement)
-            neighborhoodEditText.setText(it.neighborhood)
-            cityEditText.setText(it.city)
-            ufEditText.setText(it.state)
-        }
+    private fun FragmentNewContactBinding.fillAllFields(contact : ContactData) {
+        nameEditText.setText(contact.name)
+        surnameEditText.setText(contact.surname)
+        countryCodeEditText.setText(contact.country_code.toString())
+        areaCodeEditText.setText(contact.area_code.toString())
+        phoneNumberEditText.setText(contact.phone_number.toString())
+        cepEditText.setText(contact.cep.toString())
+        streetEditText.setText(contact.street)
+        numberEditText.setText(contact.number.toString())
+        complementEditText.setText(contact.complement)
+        neighborhoodEditText.setText(contact.neighborhood)
+        cityEditText.setText(contact.city)
+        ufEditText.setText(contact.state)
     }
 
     private fun FragmentNewContactBinding.checkEmptyFields(): Boolean =
@@ -152,6 +152,14 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
     private fun FragmentNewContactBinding.subscribeLiveData() {
         newContactViewModel.mutableLiveData.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
+                is NewContactViewModel.ViewState.ContactLoadingByIdSuccess ->
+                    fillAllFields(state.contact)
+
+                is NewContactViewModel.ViewState.ContactLoadingByIdError -> {
+                    showToast(getString(R.string.error_loading_contact))
+                    findNavController().popBackStack()
+                }
+
                 is NewContactViewModel.ViewState.InsertActionSuccess -> {
                     showToast(getString(R.string.contact_saved_message))
                     findNavController().popBackStack()

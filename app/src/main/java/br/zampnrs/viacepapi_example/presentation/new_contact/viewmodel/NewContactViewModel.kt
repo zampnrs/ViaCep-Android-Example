@@ -21,6 +21,8 @@ class NewContactViewModel @Inject constructor(
 ) : ViewModel() {
 
     sealed class ViewState {
+        class ContactLoadingByIdSuccess(val contact : ContactData) : ViewState()
+        object ContactLoadingByIdError : ViewState()
         object InsertActionSuccess : ViewState()
         object InsertActionError : ViewState()
         object UpdateActionSuccess : ViewState()
@@ -34,7 +36,13 @@ class NewContactViewModel @Inject constructor(
     val mutableLiveData = MutableLiveData<ViewState>()
 
     fun getById(id: Int) = viewModelScope.launch {
-        contactRepository.getById(id)
+        try {
+            contactRepository.getById(id).also {
+                mutableLiveData.postValue(ViewState.ContactLoadingByIdSuccess(it))
+            }
+        } catch (e: Exception) {
+            mutableLiveData.postValue(ViewState.ContactLoadingByIdError)
+        }
     }
 
     fun insert(contact: ContactData) = viewModelScope.launch {

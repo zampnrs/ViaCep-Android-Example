@@ -29,4 +29,5 @@
     <string name="contact_deleting_error_message">Erro ao apagar contato</string>
     <string name="alert_title">Alerta!</string>
     <string name="delete_message">Deseja realmente apagar?</string>
+    <string name="error_loading_contact">Erro ao carregar contato</string>
 </resources>
