@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.zampnrs.viacepapi_example.databinding.FragmentContactBinding
 import br.zampnrs.viacepapi_example.presentation.contact.viewmodel.ContactViewModel
 import br.zampnrs.viacepapi_example.utils.BaseFragment
-import br.zampnrs.viacepapi_example.utils.showToast
 
 import dagger.hilt.android.AndroidEntryPoint
 
