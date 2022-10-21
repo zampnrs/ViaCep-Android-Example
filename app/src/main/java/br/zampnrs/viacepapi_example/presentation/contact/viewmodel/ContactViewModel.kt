@@ -22,7 +22,9 @@ class ContactViewModel @Inject constructor(
 {
     sealed class ViewState {
         object Initial : ViewState()
+        object Loading : ViewState()
         object Success : ViewState()
+        object Error : ViewState()
     }
 
     private val _viewStateFlow = MutableStateFlow<ViewState>(ViewState.Initial)
@@ -31,10 +33,17 @@ class ContactViewModel @Inject constructor(
     var contactsList: List<ContactData> = emptyList()
 
     fun getAllContacts() = viewModelScope.launch {
-        contactRepository.getAll().also {
-            contactsList = it
-            _viewStateFlow.value = ViewState.Success
+        _viewStateFlow.value = ViewState.Loading
+
+        try {
+            contactRepository.getAll().also {
+                contactsList = it
+                _viewStateFlow.value = ViewState.Success
+            }
+        } catch (e: Exception) {
+            _viewStateFlow.value = ViewState.Error
         }
+
     }
 
 }

@@ -28,70 +28,81 @@ class NewContactViewModel @Inject constructor(
 
     sealed class ViewState {
         object Initial : ViewState()
+        object Loading : ViewState()
 
-        object ContactLoadingByIdSuccess : ViewState()
-        object ContactLoadingByIdError : ViewState()
-        object InsertActionSuccess : ViewState()
-        object InsertActionError : ViewState()
-        object UpdateActionSuccess : ViewState()
-        object UpdateActionError : ViewState()
-        object DeleteActionSuccess : ViewState()
-        object DeleteActionError : ViewState()
+        object ContactByIdSuccess : ViewState()
+        object InsertSuccess : ViewState()
+        object UpdateSuccess : ViewState()
+        object DeleteSuccess : ViewState()
+        object AddressSuccess : ViewState()
 
-        object AddressLoadingSuccess : ViewState()
-        object AddressLoadingError : ViewState()
+        object ContactByIdError : ViewState()
+        object InsertError : ViewState()
+        object UpdateError : ViewState()
+        object DeleteError : ViewState()
+        object AddressError : ViewState()
     }
 
     private val _viewStateFlow = MutableStateFlow<ViewState>(ViewState.Initial)
     val viewStateFlow: StateFlow<ViewState> get() = _viewStateFlow
 
     fun getById(id: Int) = viewModelScope.launch {
+        _viewStateFlow.value = ViewState.Loading
+
         try {
             contactRepository.getById(id).also {
                 contact = it
-                _viewStateFlow.value = ViewState.ContactLoadingByIdSuccess
+                _viewStateFlow.value = ViewState.ContactByIdSuccess
             }
         } catch (e: Exception) {
-            _viewStateFlow.value = ViewState.ContactLoadingByIdError
+            _viewStateFlow.value = ViewState.ContactByIdError
         }
     }
 
     fun insert(contact: ContactData) = viewModelScope.launch {
+        _viewStateFlow.value = ViewState.Loading
+
         try {
             contactRepository.insert(contact)
-            _viewStateFlow.value = ViewState.InsertActionSuccess
+            _viewStateFlow.value = ViewState.InsertSuccess
         } catch (e: Exception) {
-            _viewStateFlow.value = ViewState.InsertActionError
+            _viewStateFlow.value = ViewState.InsertError
         }
     }
 
     fun update(contact: ContactData, contactId: Int) = viewModelScope.launch {
+        _viewStateFlow.value = ViewState.Loading
+
         try {
             contact.id = contactId
             contactRepository.update(contact)
-            _viewStateFlow.value = ViewState.UpdateActionSuccess
+            _viewStateFlow.value = ViewState.UpdateSuccess
         } catch (e: Exception) {
-            _viewStateFlow.value = ViewState.UpdateActionError
+            _viewStateFlow.value = ViewState.UpdateError
         }
     }
 
     fun deleteContact(id: Int) = viewModelScope.launch {
+        _viewStateFlow.value = ViewState.Loading
+
         try {
             contactRepository.delete(id)
-            _viewStateFlow.value = ViewState.DeleteActionSuccess
+            _viewStateFlow.value = ViewState.DeleteSuccess
         } catch (e: Exception) {
-            _viewStateFlow.value = ViewState.DeleteActionError
+            _viewStateFlow.value = ViewState.DeleteError
         }
     }
 
     fun loadCep(cep: String) = viewModelScope.launch {
+        _viewStateFlow.value = ViewState.Loading
+
         try {
             addressUseCase.loadAddress(cep).also {
                 address = it
-                _viewStateFlow.value = ViewState.AddressLoadingSuccess
+                _viewStateFlow.value = ViewState.AddressSuccess
             }
         } catch (e: Exception) {
-            _viewStateFlow.value = ViewState.AddressLoadingError
+            _viewStateFlow.value = ViewState.AddressError
         }
     }
 

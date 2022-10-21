@@ -4,6 +4,7 @@
 
     <string name="contact_fragment_label">Contact Fragment</string>
     <string name="new_contact_fragment_label">New Contact Fragment</string>
+    <string name="contacts_loading_error_message">Erro ao carregar os contatos</string>
     <string name="cep_label">CEP</string>
     <string name="street_label">Logradouro</string>
     <string name="number_label">Número</string>

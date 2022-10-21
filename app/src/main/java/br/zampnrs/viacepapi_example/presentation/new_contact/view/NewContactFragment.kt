@@ -8,22 +8,20 @@ import android.widget.Toast
 
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 import br.zampnrs.viacepapi_example.R
 import br.zampnrs.viacepapi_example.data.db.ContactData
-import br.zampnrs.viacepapi_example.data.network.responses.AddressResponse
 import br.zampnrs.viacepapi_example.databinding.FragmentNewContactBinding
 import br.zampnrs.viacepapi_example.presentation.new_contact.viewmodel.NewContactViewModel
 import br.zampnrs.viacepapi_example.utils.BaseFragment
 import br.zampnrs.viacepapi_example.utils.Constants
+import br.zampnrs.viacepapi_example.utils.show
 import br.zampnrs.viacepapi_example.utils.showToast
 
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint
@@ -157,47 +155,48 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
         lifecycleScope.launchWhenStarted {
             newContactViewModel.viewStateFlow.collect { state ->
                 when (state) {
-                    is NewContactViewModel.ViewState.ContactLoadingByIdSuccess ->
+                    is NewContactViewModel.ViewState.Initial -> progressBar.show(false)
+                    is NewContactViewModel.ViewState.Loading -> progressBar.show(true)
+
+                    is NewContactViewModel.ViewState.ContactByIdSuccess ->
                         fillAllFields()
 
-                    is NewContactViewModel.ViewState.ContactLoadingByIdError -> {
+                    is NewContactViewModel.ViewState.ContactByIdError -> {
                         showToast(getString(R.string.error_loading_contact))
                         findNavController().popBackStack()
                     }
 
-                    is NewContactViewModel.ViewState.InsertActionSuccess -> {
+                    is NewContactViewModel.ViewState.InsertSuccess -> {
                         showToast(getString(R.string.contact_saved_message))
                         findNavController().popBackStack()
                     }
 
-                    is NewContactViewModel.ViewState.InsertActionError ->
+                    is NewContactViewModel.ViewState.InsertError ->
                         showToast(getString(R.string.contact_saving_error_message))
 
-                    is NewContactViewModel.ViewState.UpdateActionSuccess -> {
+                    is NewContactViewModel.ViewState.UpdateSuccess -> {
                         showToast(getString(R.string.contact_updated_message))
                         findNavController().popBackStack()
                     }
 
-                    is NewContactViewModel.ViewState.UpdateActionError ->
+                    is NewContactViewModel.ViewState.UpdateError ->
                         showToast(getString(R.string.contact_updating_error_message))
 
-                    is NewContactViewModel.ViewState.DeleteActionSuccess ->
+                    is NewContactViewModel.ViewState.DeleteSuccess ->
                         findNavController().popBackStack()
 
-                    is NewContactViewModel.ViewState.DeleteActionError ->
+                    is NewContactViewModel.ViewState.DeleteError ->
                         showToast(getString(R.string.contact_deleting_error_message))
 
-                    is NewContactViewModel.ViewState.AddressLoadingSuccess -> {
-                        progressBar.visibility = View.GONE
+                    is NewContactViewModel.ViewState.AddressSuccess -> {
+                        progressBar.show(false)
                         fillAddressFields()
                     }
 
-                    is NewContactViewModel.ViewState.AddressLoadingError -> {
-                        progressBar.visibility = View.GONE
+                    is NewContactViewModel.ViewState.AddressError -> {
+                        progressBar.show(false)
                         showToast(getString(R.string.wrong_zip_code))
                     }
-
-                    else -> {}
                 }
             }
         }

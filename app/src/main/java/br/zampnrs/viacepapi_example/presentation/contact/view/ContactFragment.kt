@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.View
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 
+import br.zampnrs.viacepapi_example.R
 import br.zampnrs.viacepapi_example.databinding.FragmentContactBinding
 import br.zampnrs.viacepapi_example.presentation.contact.viewmodel.ContactViewModel
 import br.zampnrs.viacepapi_example.utils.BaseFragment
+import br.zampnrs.viacepapi_example.utils.show
+import br.zampnrs.viacepapi_example.utils.showToast
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,9 +68,16 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(
         lifecycleScope.launchWhenStarted {
             contactViewModel.viewStateFlow.collect { state ->
                 when (state) {
-                    is ContactViewModel.ViewState.Success ->
+                    is ContactViewModel.ViewState.Initial ->
+                        progressBar.show(false)
+                    is ContactViewModel.ViewState.Success -> {
+                        progressBar.show(false)
                         handleContactLoadingSuccess()
-                    else -> {}
+                    }
+                    is ContactViewModel.ViewState.Loading ->
+                        progressBar.show(true)
+                    is ContactViewModel.ViewState.Error ->
+                        showToast(getString(R.string.contacts_loading_error_message))
                 }
             }
         }
@@ -76,7 +85,7 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(
 
     private fun FragmentContactBinding.handleContactLoadingSuccess() {
         contactViewModel.contactsList.let { list ->
-            emptyContactBookTextView.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+            emptyContactBookTextView.show(list.isEmpty())
             contactAdapter.setList(list)
         }
     }
