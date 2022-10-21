@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
@@ -22,6 +23,7 @@ import br.zampnrs.viacepapi_example.utils.Constants
 import br.zampnrs.viacepapi_example.utils.showToast
 
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint
@@ -106,19 +108,21 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
         })
     }
 
-    private fun FragmentNewContactBinding.fillAllFields(contact : ContactData) {
-        nameEditText.setText(contact.name)
-        surnameEditText.setText(contact.surname)
-        countryCodeEditText.setText(contact.country_code.toString())
-        areaCodeEditText.setText(contact.area_code.toString())
-        phoneNumberEditText.setText(contact.phone_number.toString())
-        cepEditText.setText(contact.cep.toString())
-        streetEditText.setText(contact.street)
-        numberEditText.setText(contact.number.toString())
-        complementEditText.setText(contact.complement)
-        neighborhoodEditText.setText(contact.neighborhood)
-        cityEditText.setText(contact.city)
-        ufEditText.setText(contact.state)
+    private fun FragmentNewContactBinding.fillAllFields() {
+        newContactViewModel.contact?.let {
+            nameEditText.setText(it.name)
+            surnameEditText.setText(it.surname)
+            countryCodeEditText.setText(it.country_code.toString())
+            areaCodeEditText.setText(it.area_code.toString())
+            phoneNumberEditText.setText(it.phone_number.toString())
+            cepEditText.setText(it.cep.toString())
+            streetEditText.setText(it.street)
+            numberEditText.setText(it.number.toString())
+            complementEditText.setText(it.complement)
+            neighborhoodEditText.setText(it.neighborhood)
+            cityEditText.setText(it.city)
+            ufEditText.setText(it.state)
+        }
     }
 
     private fun FragmentNewContactBinding.checkEmptyFields(): Boolean =
@@ -150,55 +154,61 @@ class NewContactFragment : BaseFragment<FragmentNewContactBinding>(
     )
 
     private fun FragmentNewContactBinding.subscribeLiveData() {
-        newContactViewModel.mutableLiveData.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is NewContactViewModel.ViewState.ContactLoadingByIdSuccess ->
-                    fillAllFields(state.contact)
+        lifecycleScope.launchWhenStarted {
+            newContactViewModel.viewStateFlow.collect { state ->
+                when (state) {
+                    is NewContactViewModel.ViewState.ContactLoadingByIdSuccess ->
+                        fillAllFields()
 
-                is NewContactViewModel.ViewState.ContactLoadingByIdError -> {
-                    showToast(getString(R.string.error_loading_contact))
-                    findNavController().popBackStack()
-                }
+                    is NewContactViewModel.ViewState.ContactLoadingByIdError -> {
+                        showToast(getString(R.string.error_loading_contact))
+                        findNavController().popBackStack()
+                    }
 
-                is NewContactViewModel.ViewState.InsertActionSuccess -> {
-                    showToast(getString(R.string.contact_saved_message))
-                    findNavController().popBackStack()
-                }
+                    is NewContactViewModel.ViewState.InsertActionSuccess -> {
+                        showToast(getString(R.string.contact_saved_message))
+                        findNavController().popBackStack()
+                    }
 
-                is NewContactViewModel.ViewState.InsertActionError ->
-                    showToast(getString(R.string.contact_saving_error_message))
+                    is NewContactViewModel.ViewState.InsertActionError ->
+                        showToast(getString(R.string.contact_saving_error_message))
 
-                is NewContactViewModel.ViewState.UpdateActionSuccess -> {
-                    showToast(getString(R.string.contact_updated_message))
-                    findNavController().popBackStack()
-                }
+                    is NewContactViewModel.ViewState.UpdateActionSuccess -> {
+                        showToast(getString(R.string.contact_updated_message))
+                        findNavController().popBackStack()
+                    }
 
-                is NewContactViewModel.ViewState.UpdateActionError ->
-                    showToast(getString(R.string.contact_updating_error_message))
+                    is NewContactViewModel.ViewState.UpdateActionError ->
+                        showToast(getString(R.string.contact_updating_error_message))
 
-                is NewContactViewModel.ViewState.DeleteActionSuccess ->
-                    findNavController().popBackStack()
+                    is NewContactViewModel.ViewState.DeleteActionSuccess ->
+                        findNavController().popBackStack()
 
-                is NewContactViewModel.ViewState.DeleteActionError ->
-                    showToast(getString(R.string.contact_deleting_error_message))
+                    is NewContactViewModel.ViewState.DeleteActionError ->
+                        showToast(getString(R.string.contact_deleting_error_message))
 
-                is NewContactViewModel.ViewState.AddressLoadingSuccess -> {
-                    progressBar.visibility = View.GONE
-                    fillAddressFields(state.address)
-                }
+                    is NewContactViewModel.ViewState.AddressLoadingSuccess -> {
+                        progressBar.visibility = View.GONE
+                        fillAddressFields()
+                    }
 
-                is NewContactViewModel.ViewState.AddressLoadingError -> {
-                    progressBar.visibility = View.GONE
-                    showToast(getString(R.string.wrong_zip_code))
+                    is NewContactViewModel.ViewState.AddressLoadingError -> {
+                        progressBar.visibility = View.GONE
+                        showToast(getString(R.string.wrong_zip_code))
+                    }
+
+                    else -> {}
                 }
             }
-        })
+        }
     }
 
-    private fun FragmentNewContactBinding.fillAddressFields(address: AddressResponse) {
-        streetEditText.setText(address.logradouro)
-        neighborhoodEditText.setText(address.bairro)
-        cityEditText.setText(address.localidade)
-        ufEditText.setText(address.uf)
+    private fun FragmentNewContactBinding.fillAddressFields() {
+        newContactViewModel.address?.let {
+            streetEditText.setText(it.logradouro)
+            neighborhoodEditText.setText(it.bairro)
+            cityEditText.setText(it.localidade)
+            ufEditText.setText(it.uf)
+        }
     }
 }

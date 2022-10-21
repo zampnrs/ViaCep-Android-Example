@@ -1,6 +1,5 @@
 package br.zampnrs.viacepapi_example.presentation.contact.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
@@ -8,7 +7,11 @@ import br.zampnrs.viacepapi_example.data.db.ContactData
 import br.zampnrs.viacepapi_example.data.db.ContactRepository
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
 import javax.inject.Inject
 
 
@@ -18,18 +21,19 @@ class ContactViewModel @Inject constructor(
 ) : ViewModel()
 {
     sealed class ViewState {
-        object AllContactsLoadingSuccess: ViewState()
-
+        object Initial : ViewState()
+        object Success : ViewState()
     }
 
-    val mutableLiveData = MutableLiveData<ViewState>()
+    private val _viewStateFlow = MutableStateFlow<ViewState>(ViewState.Initial)
+    val viewStateFlow: StateFlow<ViewState> get() = _viewStateFlow
 
     var contactsList: List<ContactData> = emptyList()
 
     fun getAllContacts() = viewModelScope.launch {
         contactRepository.getAll().also {
             contactsList = it
-            mutableLiveData.postValue(ViewState.AllContactsLoadingSuccess)
+            _viewStateFlow.value = ViewState.Success
         }
     }
 

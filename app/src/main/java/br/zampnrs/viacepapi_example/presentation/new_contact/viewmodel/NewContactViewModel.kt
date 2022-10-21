@@ -1,6 +1,5 @@
 package br.zampnrs.viacepapi_example.presentation.new_contact.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
@@ -10,7 +9,11 @@ import br.zampnrs.viacepapi_example.data.network.responses.AddressResponse
 import br.zampnrs.viacepapi_example.domain.AddressUseCase
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
 import javax.inject.Inject
 
 
@@ -20,8 +23,13 @@ class NewContactViewModel @Inject constructor(
     private val addressUseCase: AddressUseCase
 ) : ViewModel() {
 
+    var contact : ContactData? = null
+    var address: AddressResponse? = null
+
     sealed class ViewState {
-        class ContactLoadingByIdSuccess(val contact : ContactData) : ViewState()
+        object Initial : ViewState()
+
+        object ContactLoadingByIdSuccess : ViewState()
         object ContactLoadingByIdError : ViewState()
         object InsertActionSuccess : ViewState()
         object InsertActionError : ViewState()
@@ -29,28 +37,31 @@ class NewContactViewModel @Inject constructor(
         object UpdateActionError : ViewState()
         object DeleteActionSuccess : ViewState()
         object DeleteActionError : ViewState()
-        class AddressLoadingSuccess(val address: AddressResponse) : ViewState()
+
+        object AddressLoadingSuccess : ViewState()
         object AddressLoadingError : ViewState()
     }
 
-    val mutableLiveData = MutableLiveData<ViewState>()
+    private val _viewStateFlow = MutableStateFlow<ViewState>(ViewState.Initial)
+    val viewStateFlow: StateFlow<ViewState> get() = _viewStateFlow
 
     fun getById(id: Int) = viewModelScope.launch {
         try {
             contactRepository.getById(id).also {
-                mutableLiveData.postValue(ViewState.ContactLoadingByIdSuccess(it))
+                contact = it
+                _viewStateFlow.value = ViewState.ContactLoadingByIdSuccess
             }
         } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.ContactLoadingByIdError)
+            _viewStateFlow.value = ViewState.ContactLoadingByIdError
         }
     }
 
     fun insert(contact: ContactData) = viewModelScope.launch {
         try {
             contactRepository.insert(contact)
-            mutableLiveData.postValue(ViewState.InsertActionSuccess)
+            _viewStateFlow.value = ViewState.InsertActionSuccess
         } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.InsertActionError)
+            _viewStateFlow.value = ViewState.InsertActionError
         }
     }
 
@@ -58,28 +69,29 @@ class NewContactViewModel @Inject constructor(
         try {
             contact.id = contactId
             contactRepository.update(contact)
-            mutableLiveData.postValue(ViewState.UpdateActionSuccess)
+            _viewStateFlow.value = ViewState.UpdateActionSuccess
         } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.UpdateActionError)
+            _viewStateFlow.value = ViewState.UpdateActionError
         }
     }
 
     fun deleteContact(id: Int) = viewModelScope.launch {
         try {
             contactRepository.delete(id)
-            mutableLiveData.postValue(ViewState.DeleteActionSuccess)
+            _viewStateFlow.value = ViewState.DeleteActionSuccess
         } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.DeleteActionError)
+            _viewStateFlow.value = ViewState.DeleteActionError
         }
     }
 
     fun loadCep(cep: String) = viewModelScope.launch {
         try {
             addressUseCase.loadAddress(cep).also {
-                mutableLiveData.postValue(ViewState.AddressLoadingSuccess(it))
+                address = it
+                _viewStateFlow.value = ViewState.AddressLoadingSuccess
             }
         } catch (e: Exception) {
-            mutableLiveData.postValue(ViewState.AddressLoadingError)
+            _viewStateFlow.value = ViewState.AddressLoadingError
         }
     }
 

@@ -5,6 +5,7 @@ import android.view.View
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -35,7 +36,7 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(
             setClickListeners()
             recyclerContacts.adapter = contactAdapter
             recyclerContacts.layoutManager = LinearLayoutManager(requireContext())
-            subscribeLiveData()
+            setUpViewStateFlow()
         }
         setAdapterActions()
     }
@@ -61,14 +62,16 @@ class ContactFragment : BaseFragment<FragmentContactBinding>(
         )
     }
 
-    private fun FragmentContactBinding.subscribeLiveData() {
-        contactViewModel.mutableLiveData.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is ContactViewModel.ViewState.AllContactsLoadingSuccess ->
-                    handleContactLoadingSuccess()
-                else -> {}
+    private fun FragmentContactBinding.setUpViewStateFlow() {
+        lifecycleScope.launchWhenStarted {
+            contactViewModel.viewStateFlow.collect { state ->
+                when (state) {
+                    is ContactViewModel.ViewState.Success ->
+                        handleContactLoadingSuccess()
+                    else -> {}
+                }
             }
-        })
+        }
     }
 
     private fun FragmentContactBinding.handleContactLoadingSuccess() {
