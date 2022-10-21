@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--    New Contact Screen-->
+    <string name="contacts_loading_error_message">Erro ao carregar os contatos</string>
+    <string name="cep_label">CEP</string>
+    <string name="street_label">Logradouro</string>
+    <string name="number_label">Número</string>
+    <string name="complement_label">Complemento</string>
+    <string name="neighborhood_label">Bairro</string>
+    <string name="city_label">Cidade</string>
+    <string name="uf_label">UF</string>
+    <string name="address_label">Endereço</string>
+    <string name="country_code_label">DDI</string>
+    <string name="state_code_label">DDD</string>
+    <string name="phone_number_label">Celular</string>
+    <string name="name_label">Nome</string>
+    <string name="surname_label">Sobrenome</string>
+    <string name="save_contact_error">Alguns campos parecem estar vazios</string>
+    <string name="contact_saved_message">Contato salvo com sucesso</string>
+    <string name="contact_saving_error_message">Erro ao salvar contato</string>
+    <string name="contact_updated_message">Contato atualizado com sucesso</string>
+    <string name="contact_updating_error_message">Erro ao atualizar contato</string>
+    <string name="empty_contactBook_label">Agenda vazia</string>
+    <string name="wrong_zip_code">CEP incorreto</string>
+    <string name="delete_action">Apagar</string>
+    <string name="cancel">Voltar</string>
+    <string name="contact_deleting_error_message">Erro ao apagar contato</string>
+    <string name="alert_title">Alerta!</string>
+    <string name="delete_message">Deseja realmente apagar?</string>
+    <string name="error_loading_contact">Erro ao carregar contato</string>
+
+</resources>

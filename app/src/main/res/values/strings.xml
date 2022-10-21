@@ -1,34 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ContactBook</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name" translatable="false">ContactBook</string>
 
-    <string name="contact_fragment_label">Contact Fragment</string>
-    <string name="new_contact_fragment_label">New Contact Fragment</string>
-    <string name="contacts_loading_error_message">Erro ao carregar os contatos</string>
-    <string name="cep_label">CEP</string>
-    <string name="street_label">Logradouro</string>
-    <string name="number_label">Número</string>
-    <string name="complement_label">Complemento</string>
-    <string name="neighborhood_label">Bairro</string>
-    <string name="city_label">Cidade</string>
-    <string name="uf_label">UF</string>
-    <string name="address_label">Endereço</string>
-    <string name="country_code_label">DDI</string>
-    <string name="state_code_label">DDD</string>
-    <string name="phone_number_label">Celular</string>
-    <string name="name_label">Nome</string>
-    <string name="surname_label">Sobrenome</string>
-    <string name="save_contact_error">Alguns campos parecem estar vazios</string>
-    <string name="contact_saved_message">Contato salvo com sucesso</string>
-    <string name="contact_saving_error_message">Erro ao salvar contato</string>
-    <string name="contact_updated_message">Contato atualizado com sucesso</string>
-    <string name="contact_updating_error_message">Erro ao atualizar contato</string>
-    <string name="empty_contactBook_label">Agenda vazia</string>
-    <string name="wrong_zip_code">CEP incorreto</string>
-    <string name="delete_action">Apagar</string>
-    <string name="cancel">Voltar</string>
-    <string name="contact_deleting_error_message">Erro ao apagar contato</string>
-    <string name="alert_title">Alerta!</string>
-    <string name="delete_message">Deseja realmente apagar?</string>
-    <string name="error_loading_contact">Erro ao carregar contato</string>
+    <!--    Navigation Graph-->
+    <string name="contact_fragment_label" translatable="false">Contact Fragment</string>
+    <string name="new_contact_fragment_label" translatable="false">New Contact Fragment</string>
+
+    <!--    New Contact Screen-->
+    <string name="contacts_loading_error_message">Error loading contacts</string>
+    <string name="cep_label">ZIP</string>
+    <string name="street_label">Street</string>
+    <string name="number_label">Number</string>
+    <string name="complement_label">Complement</string>
+    <string name="neighborhood_label">Neighbourhood</string>
+    <string name="city_label">City</string>
+    <string name="uf_label">State</string>
+    <string name="address_label">Address</string>
+    <string name="country_code_label">Country code</string>
+    <string name="state_code_label">Area code</string>
+    <string name="phone_number_label">Phone</string>
+    <string name="name_label">Name</string>
+    <string name="surname_label">Surname</string>
+    <string name="save_contact_error">Some fields seems to be empty</string>
+    <string name="contact_saved_message">Contact successfully saved</string>
+    <string name="contact_saving_error_message">Error saving contact</string>
+    <string name="contact_updated_message">Contact successfully updated</string>
+    <string name="contact_updating_error_message">Error updating contact</string>
+    <string name="empty_contactBook_label">Empty contact book</string>
+    <string name="wrong_zip_code">ZIP seems to be wrong</string>
+    <string name="delete_action">Delete</string>
+    <string name="cancel">Back</string>
+    <string name="contact_deleting_error_message">Error deleting contact</string>
+    <string name="alert_title">Alert!</string>
+    <string name="delete_message">Would you really like to delete it?</string>
+    <string name="error_loading_contact">Error loading contact</string>
+
 </resources>
